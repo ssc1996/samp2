@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.sep.samp2.user" >
+<sql id="search_user_colunm">
+	user_id,user_no,user_name,real_name,user_pwd,user_phone,user_comp_id,user_create_date,user_create_id,user_create_name,delete_data,user_disable
+</sql>
+<sql id="a" lang="1">create table samp4</sql>
+<sql id="search_role_colunm" >
+	r.role_id, r.role_name, r.role_menu, r.delete_data, r.menu_parent, r.menu_grade, r.menu_type, r.menu_path, r.menu_sign
+</sql>
+<select id="backLogin" parameterType="SampUserInfo" resultType="SampUserInfo">
+	SELECT <include refid="search_user_colunm"/> FROM user_info WHERE (user_name=#{userName} OR user_phone=#{userName}) AND user_pwd = #{userPwd} 
+</select>
+<select id="userMenu" parameterType="java.lang.Integer" resultType="SampRole">
+	SELECT <include refid="search_role_colunm"/> FROM role r ,user_role ur WHERE r.role_id= ur.role_id AND ur.user_id=#{userId}
+</select>
+<select id="findAllUser" resultType="SampUserInfo">
+	SELECT <include refid="search_user_colunm"/> FROM user_info ORDER BY user_id DESC
+</select>
+<select id="findAllRole" resultType="SampRole">
+	SELECT <include refid="search_role_colunm"/> FROM role r ORDER BY menu_type DESC, role_id ASC
+</select>
+<select id="findAllRoleTree" resultType="SampRole">
+	SELECT <include refid="search_role_colunm"/> FROM role r, role e where r.menu_parent = 0 AND r.role_id = e.menu_parent  ORDER BY r.menu_type DESC,r.role_id ASC,e.role_id ASC;
+</select>
+<select id="findUser" parameterType="java.lang.String" resultType="SampUserInfo">
+	SELECT <include refid="search_user_colunm"/> FROM user_info WHERE user_id = #{userName} or user_name = #{userName}
+</select>
+<delete id="delUserRole">
+	DELETE FROM user_role WHERE user_id=#{userId}
+	<if test="roleId != null and roleId != ''">
+	 	 AND role_id=#{roleId}
+	 </if>
+</delete>
+<insert id="insUser" parameterType="SampUserInfo">
+	INSERT INTO user_info values(null,#{userNo},#{userName},#{realName},#{userPwd},null,#{userPhone},#{userCompId},SYSDATE(),#{userCreateId},#{userCreateName},#{deleteData},#{userDisable})
+</insert>
+<insert id="insRole" parameterType="SampRole">
+	INSERT INTO role values(null,#{roleName},#{roleMenu},#{menuParent},#{menuGrade},#{menuType},#{menuPath},#{menuSign},#{deleteData})
+</insert>
+<insert id="insUserRole" parameterType="java.util.Map">
+	INSERT INTO user_role values(null,#{userId},null,#{roleId},null)
+</insert>
+<insert id="insUserRoleBatch" parameterType="java.util.List">
+	INSERT INTO user_role
+		values
+		<foreach item="item" separator="," index="urList" collection="list">
+			(null,#{item.userId},null,#{item.roleId},null)
+		</foreach>
+</insert>
+
+<update id="modifyUser" parameterType="SampUserInfo">
+	UPDATE user_info
+		<set>
+			<if test="userNo != null">
+				user_no = #{userNo},
+			</if>
+			<if test="userName != null">
+				user_name = #{userName},
+			</if>
+			<if test="realName != null">
+				real_name = #{realName},
+			</if>
+			<if test="userPwd != null">
+				user_pwd = #{userPwd},
+			</if>
+			<if test="userPhone != null">
+				user_phone = #{userPhone},
+			</if>
+			<if test="userCompId != null">
+				user_comp_id = #{userCompId},
+			</if>
+			<if test="deleteData != null">
+				delete_data = #{deleteData},
+			</if>
+			<if test="userDisable != null">
+				user_disable = #{userDisable},
+			</if>
+		</set>
+		WHERE user_id = #{userId}
+</update>
+</mapper>

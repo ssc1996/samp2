@@ -1,0 +1,432 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.sep.samp2.samp" >
+	<select id="getUserInfo" resultType="SampUserInfo" parameterType="SampUserInfo">
+		select
+			ui.user_id userId,
+			ui.user_no userNo,
+			ui.user_name userName,
+			ui.user_pwd userPwd,
+			ui.user_phone userPhone,
+			ui.user_comp_id userCompId,
+			ui.user_role userRole,
+			ui.user_create_date userCreateDate,
+			ui.user_create_id userCreateId,
+			ui.user_create_name userCreateName
+		from
+			user_info ui
+		where
+			 ui.user_name = #{userName} and ui.user_pwd = #{userPwd} and ui.delete_data = 'N' and ui.user_disable = 'N'        
+	</select>
+	<insert id="addProjInfo" parameterType="SampModelUtil">
+		insert
+			into
+		proj_info(
+  			proj_no,
+ 			proj_name,
+ 			samp_num,
+ 			cust_name,
+ 			proj_person_liable,
+ 			proj_member,
+  			proj_time,
+  			max_depth,
+ 			soil_sample_num,
+ 			water_sample_num,
+ 			proj_describe,
+ 			test_content,
+ 			remarks,
+ 			proj_create_id,
+  			proj_create_name,
+ 			create_time
+		)values(
+  			#{obj1.projNo},
+ 			#{obj1.projName},
+ 			#{obj1.sampNum},
+ 			#{obj1.custName},
+ 			#{obj1.projPersonLiable},
+ 			#{obj1.projMember},
+  			#{obj1.projTime},
+  			#{obj1.maxDepth},
+ 			#{obj1.soilSampleNum},
+ 			#{obj1.waterSampleNum},
+ 			#{obj1.projDescribe},
+ 			#{obj1.testContent},
+ 			#{obj1.remarks},
+ 			#{obj2.userId},
+  			#{obj2.userName},
+ 			now()
+		)
+	</insert>
+	<select id="getCompStaff" parameterType="INTEGER" resultType="SampUserInfo">
+		select
+			user_id userId,
+			user_no userNo,
+			user_name userName
+		from
+			user_info
+		where
+			delete_data = 'N'
+		<!-- and
+			user_comp_id = #{comp_id} -->
+	</select>
+	<select id="getProjByComp" resultType="SampProjectInfo" parameterType="SampModelUtil">
+		select
+			proj_id projId,
+  			proj_no projNo,
+  			proj_name projName,
+ 			samp_num sampNum,
+  			cust_name custName,
+  			proj_person_liable projPersonLiable,
+  			proj_member projMember,
+  			proj_time projTime,
+  			max_depth maxDepth,
+  			soil_sample_num soilSampleNum,
+  			water_sample_num waterSampleNum,
+  			proj_describe projDescribe,
+  			test_content testContent,
+  			remarks,
+  			state
+  		from
+  			proj_info
+  		where
+  			delete_data = "N"
+  		and
+  			proj_id
+  		not in
+  			<foreach collection="strs" open="(" separator="," close=")" item="item">
+  				#{item}
+  			</foreach>
+	</select>
+	<insert id="insertSamp" parameterType="SampSampPoint">
+		<selectKey resultType="STRING" order="AFTER" keyProperty="sampId">
+          SELECT LAST_INSERT_ID()
+    	</selectKey>
+		insert
+			into
+		proj_samp(
+			proj_id ,
+			proj_no ,
+			position_no ,
+			samp_point_n ,
+			samp_point_e ,
+			samp_begin_date ,
+			samp_begin_time ,
+			samp_end_date ,
+			samp_end_time ,
+			elevation_ground ,
+			elevation_wellhead ,
+			drillhole_depth ,
+			white_tube_depth_begin ,
+			white_tube_depth_end ,
+			sieve_depth_begin ,
+			sieve_depth_end ,
+			snitial_water_level ,
+			stable_water_level ,
+			deep_wells ,
+			samp_describe
+		)values(
+			#{projId} ,
+			#{projNo},
+			#{positionNo},
+			#{sampPointN},
+			#{sampPointE},
+			#{sampBeginDate},
+			#{sampBeginTime},
+			#{sampEndDate},
+			#{sampEndTime},
+			#{elevationGround},
+			#{elevationWellhead},
+			#{drillholeDepth},
+			#{whiteTubeDepthBegin},
+			#{whiteTubeDepthEnd},
+			#{sieveDepthBegin},
+			#{sieveDepthEnd},
+			#{snitialWaterLevel},
+			#{stableWaterLevel},
+			#{deepWells},
+			#{sampDescribe}
+		)
+	</insert>
+	<select id="getSampByProjId" parameterType="SampModelUtil" resultType="SampSampPoint">
+		select
+			samp_id sampId,
+			proj_id projId,
+			proj_no projNo,
+			position_no positionNo,
+			samp_point_n sampPointN,
+			samp_point_e sampPointE,
+			samp_begin_date sampBeginDate,
+			samp_begin_time sampBeginTime,
+			samp_end_date sampEndDate,
+			samp_end_time sampEndTime,
+			elevation_ground elevationGround,
+			elevation_wellhead elevationWellhead,
+			drillhole_depth drillholeDepth,
+			white_tube_depth_begin whiteTubeDepthBegin,
+			white_tube_depth_end whiteTubeDepthDnd,
+			sieve_depth_begin sieveDepthBegin,
+			sieve_depth_end sieveDepthEnd,
+			snitial_water_level snitialWaterLevel,
+			stable_water_level stableWaterLevel,
+			deep_wells deepWells,
+			samp_describe sampDescribe
+		from
+			proj_samp
+		where
+			proj_id = #{id}
+		and
+			samp_id
+		not in
+			<foreach collection="strs" open="(" separator="," close=")" item="item">
+				#{item}
+			</foreach>
+	</select>
+	<select id="getMaxVersion" resultType="STRING">
+		select
+			max(version_code)
+		from
+			apk_version
+		where
+			delete_data = 'N'
+	</select>
+	<select id="getMaxVersionApk" resultType="SampModelUtil">
+		select
+			apk_path id,
+			apk_name other
+		from
+			apk_version
+		where
+			version_code = 
+		(select
+			max(version_code)
+		from
+			apk_version
+		where
+			delete_data = 'N')
+	</select>
+	<select id="getRoleNames" resultType="SampRole">
+		select
+			role_id roleId,
+			role_name roleName
+		from
+			role
+		where
+			delete_data = 'N'
+	</select>
+	<insert id="addUser" parameterType="SampUserInfo">
+		<selectKey resultType="STRING" order="AFTER" keyProperty="userId">
+          SELECT LAST_INSERT_ID()
+    	</selectKey>
+		insert
+			into
+		user_info(
+			user_name,
+			user_pwd,
+			user_role,
+			user_comp_id,
+			user_create_date,
+			user_create_id,
+			user_create_name
+		)values(
+			#{userName},
+			#{userPwd},
+			#{userRole},
+			#{userCompId},
+			sysdate(),
+			#{userCreateId},
+			#{userCreateName}
+		)
+	</insert>
+	<insert id="addUserRole" parameterType="SampModelUtil">
+		insert
+			into
+		user_role(
+			user_id,
+			role_id,
+			role_name
+		)values
+			<foreach collection="roles" separator="," item="item">
+				(#{id},
+				#{item.roleId},
+				#{item.roleName})
+			</foreach>
+		
+	</insert>
+	<select id="getRoleIdByName" parameterType="LIST" resultType="SampRole">
+		select
+			role_id roleId,
+			role_name roleName
+		from
+			role
+		where
+			role_name
+		in
+			<foreach collection="array" open="(" separator="," close=")" item="item">
+				#{item}
+			</foreach>
+	</select>
+	<update id="editUser" parameterType="SampModelUtil">
+		update
+			user_info
+		set
+			user_pwd = #{other}
+		where
+			user_id = #{id}
+	</update>
+	<select id="getUsers" parameterType="SampUserInfo" resultType="SampUserInfo">
+		select
+			ui.user_id userId,
+			ui.user_no userNo,
+			ui.user_name userName,
+			ui.user_pwd userPwd,
+			ui.user_phone userPhone,
+			ui.user_comp_id userCompId,
+			ui.user_role userRole,
+			ui.user_create_date userCreateDate,
+			ui.user_create_id userCreateId,
+			ui.user_create_name userCreateName,
+			ui.user_role userRole,
+			ui.user_disable userDisable
+		from
+			user_info ui
+		where
+			delete_data = 'N'
+		<if test="userDisable != null and '' != userDisable">
+			and user_disable = #{userDisable}
+		</if>
+	</select>
+	<insert id="addSampPara" parameterType="java.util.List">
+		insert
+			into
+		samp_para(
+			proj_id,
+			samp_id,
+			samp_position_no,
+			samp_type,
+			depth_begin,
+			depth_end,
+			color,
+			humidity,
+			geological_type,
+			compactness,
+			features,
+			pid
+		)values
+			<foreach collection="list" separator="," item="item">
+			(#{item.projId},
+			#{item.sampId},
+			#{item.sampPositionNo},
+			#{item.sampType},
+			#{item.depthBegin},
+			#{item.depthEnd},
+			#{item.color},
+			#{item.humidity},
+			#{item.geologicalType},
+			#{item.compactness},
+			#{item.features},
+			#{item.pid})
+		</foreach>
+	</insert>
+	<insert id="addSampSample" parameterType="java.util.List">
+		insert
+			into
+		samp_sample(
+			samp_id,
+			proj_id,
+			sample_no,
+			samp_position_no,
+			samp_remarks,
+			samp_depth_begin,
+			samp_depth_end,
+			samp_type,
+			sample_num,
+			sample_sn,
+			pid,
+			sample_bmn,
+			xrf_detection,
+			samp_date,
+			samp_time
+		)values
+			<foreach collection="list" separator="," item="item">
+				(#{item.sampId},
+				#{item.projId},
+				#{item.sampleNo},
+				#{item.sampPositionNo},
+				#{item.sampRemarks},
+				#{item.sampDepthBegin},
+				#{item.sampDepthEnd},
+				#{item.sampType},
+				#{item.sampleNum},
+				#{item.sampleSn},
+				#{item.pid},
+				#{item.sampleBmn},
+				#{item.xrfDetection},
+				#{item.sampDate},
+				#{item.sampTime})
+			</foreach>
+	</insert>
+	<select id="getSampParaByProjId" parameterType="SampModelUtil" resultType="SampPara">
+		select
+			para_id serverId,
+			proj_id projId,
+			samp_id sampServerId,
+			samp_position_no sampPositionNo,
+			samp_type sampType,
+			depth_begin depthBegin,
+			depth_end depthEnd,
+			color color,
+			humidity humidity,
+			geological_type geologicalType,
+			compactness compactness,
+			features features,
+			pid pid
+		from
+			samp_para
+		where
+			proj_id = #{id}
+		and
+			samp_id
+		not in
+			<foreach collection="strs" open="(" separator="," close=")" item="item">
+				#{item}
+			</foreach>
+	</select>
+	<select id="getSampSampleByProjId" parameterType="SampModelUtil" resultType="SampSample">
+		select
+			sample_id serverId,
+			samp_id sampServerId,
+			proj_id projId,
+			sample_no sampleNo,
+			samp_position_no sampPostitionNo,
+			samp_remarks sampRemarks,
+			samp_depth_begin sampDepthBegin,
+			samp_depth_end sampDepthEnd,
+			samp_type sampType,
+			sample_num sampleNum,
+			sample_sn sampleSn,
+			pid pid,
+			sample_bmn sampleBmn,
+			xrf_detection xrfDetection,
+			samp_date sampDate,
+			samp_time sampTime
+		from
+			samp_sample
+		where
+			proj_id = #{id}
+		and
+			samp_id
+		not in
+			<foreach collection="strs" open="(" separator="," close=")" item="item">
+				#{item}
+			</foreach>
+	</select>
+</mapper>
+
+<!-- SampProjectInfo
+SampSampPoint
+SampUserInfo
+SampModelUtil
+SampRole
+SampPara
+SampSample
+  -->

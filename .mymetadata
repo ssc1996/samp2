@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project-module
+  type="WEB"
+  name="samp2"
+  id="myeclipse.1517974477592"
+  context-root="/samp2"
+  j2ee-spec="1.7"
+  archive="samp2.war">
+  <attributes>
+    <attribute name="webrootdir" value="src/main/webapp" />
+  </attributes>
+</project-module>
+
