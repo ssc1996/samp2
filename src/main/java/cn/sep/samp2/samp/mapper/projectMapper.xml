@@ -1,0 +1,283 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.sep.samp2.project" >
+<sql id="search_project_colunm">
+	proj_id,proj_no,proj_name,proj_address,proj_cust_id,cust_name,proj_liable_id,proj_person_liable,proj_member_id,proj_member,proj_time,samp_num,max_depth,soil_sample_num,water_sample_num,proj_describe,test_content,remarks,state,proj_create_id,proj_create_name,create_time,proj_modify_id,proj_modify_person,proj_modify_time,proj_start_time,proj_end_time,proj_company,delete_data
+</sql>
+<select id="findProject" parameterType="SampProjectInfo" resultType="SampProjectInfo">
+	SELECT <include refid="search_project_colunm"/> FROM proj_info WHERE proj_person_liable = #{projPersonLiable} OR proj_member like '%${projMember}%'
+</select>
+<select id="findAllProject" resultType="SampProjectInfo">
+	SELECT <include refid="search_project_colunm"/> FROM proj_info 
+</select>
+<update id="delProject" parameterType="SampProjectInfo">
+	UPDATE proj_info SET delete_data = #{deleteData} WHERE proj_id = #{projId}
+</update>
+<update id="delProjectBatch" parameterType="java.util.List">
+	UPDATE proj_info SET 
+		<foreach item="item" separator="," index="projList" collection="list">
+			delete_data = #{item.deleteData} WHERE proj_id = #{item.projId}
+		</foreach>
+	
+</update>
+<delete id="removeProject" parameterType="java.lang.Integer">
+	delete from proj_info where proj_id = #{projId}
+</delete>
+<insert id="addProject" parameterType="SampProjectInfo">
+	INSERT INTO proj_info
+	<trim prefix="(" suffix=")" suffixOverrides=",">
+		<if test="projNo != null and projNo != ''">
+			proj_no,
+		</if>
+		<if test="projName != null and projName != ''">
+			proj_name,
+		</if>
+		<if test="projAddress != null and projAddress != ''">
+			proj_address,
+		</if>
+		<if test="projCustId != null and projCustId != ''">
+			proj_cust_id,
+		</if>
+		<if test="custName != null and custName != ''">
+			cust_name,
+		</if>
+		<if test="projLiableId != null and projLiableId != ''">
+			proj_liable_id,
+		</if>
+		<if test="projPersonLiable != null and projPersonLiable != ''">
+			proj_person_liable,
+		</if>
+		<if test="projMemberId != null and projMemberId != ''">
+			proj_member_id,
+		</if>
+		<if test="projMember != null and projMember != ''">
+			proj_member,
+		</if>
+		<if test="projTime != null and projTime != ''">
+			proj_time,
+		</if>
+		<if test="sampNum != null and sampNum != ''">
+			samp_num,
+		</if>
+		<if test="maxDepth != null and maxDepth != ''">
+			max_depth,
+		</if>
+		<if test="soilSampleNum != null and soilSampleNum != ''">
+			soil_sample_num,
+		</if>
+		<if test="waterSampleNum != null and waterSampleNum != ''">
+			water_sample_num,
+		</if>
+		<if test="projDescribe != null and projDescribe != ''">
+			proj_describe,
+		</if>
+		<if test="testContent != null and testContent != ''">
+			test_content,
+		</if>
+		<if test="state != null and state != ''">
+			state,
+		</if>
+		<if test="projStartTime != null and projStartTime != ''">
+			proj_start_time,
+		</if>
+		<if test="projEndTime != null and projEndTime != ''">
+			proj_end_time,
+		</if>
+		<if test="projCreateId != null and projCreateId != ''">
+			proj_create_id,
+		</if>
+		<if test="projCreateName != null and projCreateName != ''">
+			proj_create_name,
+		</if>
+		<if test="createTime != null and createTime != ''">
+			create_time,
+		</if>
+		<if test="projModifyId != null and projModifyId != ''">
+			proj_modify_id,
+		</if>
+		<if test="projModifyPerson != null and projModifyPerson != ''">
+			proj_modify_person,
+		</if>
+		<if test="projModifyTime != null and projModifyTime != ''">
+			proj_modify_time,
+		</if>
+		<if test="remarks != null and remarks != ''">
+			remarks,
+		</if>
+		<if test="deleteData != null and deleteData != ''">
+			delete_data,
+		</if>
+	</trim>
+	<trim prefix="values(" suffix=")" suffixOverrides=",">
+		<if test="projNo != null and projNo != ''">
+			#{projNo},
+		</if>
+		<if test="projName != null and projName != ''">
+			#{projName},
+		</if>
+		<if test="projAddress != null and projAddress != ''">
+			#{projAddress},
+		</if>
+		<if test="projCustId != null and projCustId != ''">
+			#{projCustId},
+		</if>
+		<if test="custName != null and custName != ''">
+			#{custName},
+		</if>
+		<if test="projLiableId != null and projLiableId != ''">
+			#{projLiableId},
+		</if>
+		<if test="projPersonLiable != null and projPersonLiable != ''">
+			#{projPersonLiable},
+		</if>
+		<if test="projMemberId != null and projMemberId != ''">
+			#{projMemberId},
+		</if>
+		<if test="projMember != null and projMember != ''">
+			#{projMember},
+		</if>
+		<if test="projTime != null and projTime != ''">
+			#{projTime},
+		</if>
+		<if test="sampNum != null and sampNum != ''">
+			#{sampNum},
+		</if>
+		<if test="maxDepth != null and maxDepth != ''">
+			#{maxDepth},
+		</if>
+		<if test="soilSampleNum != null and soilSampleNum != ''">
+			#{soilSampleNum},
+		</if>
+		<if test="waterSampleNum != null and waterSampleNum != ''">
+			#{waterSampleNum},
+		</if>
+		<if test="projDescribe != null and projDescribe != ''">
+			#{projDescribe},
+		</if>
+		<if test="testContent != null and testContent != ''">
+			#{testContent},
+		</if>
+		<if test="state != null and state != ''">
+			#{state},
+		</if>
+		<if test="projStartTime != null and projStartTime != ''">
+			#{projStartTime},
+		</if>
+		<if test="projEndTime != null and projEndTime != ''">
+			#{projEndTime},
+		</if>
+		<if test="projCreateId != null and projCreateId != ''">
+			#{projCreateId},
+		</if>
+		<if test="projCreateName != null and projCreateName != ''">
+			#{projCreateName},
+		</if>
+		<if test="createTime != null and createTime != ''">
+			#{createTime},
+		</if>
+		<if test="projModifyId != null and projModifyId != ''">
+			#{projModifyId},
+		</if>
+		<if test="projModifyPerson != null and projModifyPerson != ''">
+			#{projModifyPerson},
+		</if>
+		<if test="projModifyTime != null and projModifyTime != ''">
+			#{projModifyTime},
+		</if>
+		<if test="remarks != null and remarks != ''">
+			#{remarks},
+		</if>
+		<if test="deleteData != null and deleteData != ''">
+			#{deleteData},
+		</if>
+	</trim>
+</insert>
+
+<update id="modifyProject" parameterType="SampProjectInfo">
+	UPDATE proj_info
+		<set>
+			<if test="projNo != null and projNo != ''">
+				proj_no = #{projNo},
+			</if>
+			<if test="projName != null and projName != ''">
+				proj_name = #{projName},
+			</if>
+			<if test="projAddress != null and projAddress != ''">
+				proj_address = #{projAddress},
+			</if>
+			<if test="projCustId != null and projCustId != ''">
+				proj_cust_id = #{projCustId},
+			</if>
+			<if test="custName != null and custName != ''">
+				cust_name = #{custName},
+			</if>
+			<if test="projLiableId != null and projLiableId != ''">
+				proj_liable_id = #{projLiableId},
+			</if>
+			<if test="projPersonLiable != null and projPersonLiable != ''">
+				proj_person_liable = #{projPersonLiable},
+			</if>
+			<if test="projMemberId != null and projMemberId != ''">
+				proj_member_id = #{projMemberId},
+			</if>
+			<if test="projMember != null and projMember != ''">
+				proj_member = #{projMember},
+			</if>
+			<if test="projTime != null and projTime != ''">
+				proj_time = #{projTime},
+			</if>
+			<if test="sampNum != null and sampNum != ''">
+				samp_num = #{sampNum},
+			</if>
+			<if test="maxDepth != null and maxDepth != ''">
+				max_depth = #{maxDepth},
+			</if>
+			<if test="soilSampleNum != null and soilSampleNum != ''">
+				soil_sample_num = #{soilSampleNum},
+			</if>
+			<if test="waterSampleNum != null and waterSampleNum != ''">
+				water_sample_num = #{waterSampleNum},
+			</if>
+			<if test="projDescribe != null and projDescribe != ''">
+				proj_describe = #{projDescribe},
+			</if>
+			<if test="testContent != null and testContent != ''">
+				test_content = #{testContent},
+			</if>
+			<if test="state != null and state != ''">
+				state = #{state},
+			</if>
+			<if test="projStartTime != null and projStartTime != ''">
+				proj_start_time = #{projStartTime},
+			</if>
+			<if test="projEndTime != null and projEndTime != ''">
+				proj_end_time = #{projEndTime},
+			</if>
+			<if test="projCreateId != null and projCreateId != ''">
+				proj_create_id = #{projCreateId},
+			</if>
+			<if test="projCreateName != null and projCreateName != ''">
+				proj_create_name = #{projCreateName},
+			</if>
+			<if test="createTime != null and createTime != ''">
+				create_time = #{createTime},
+			</if>
+			<if test="projModifyId != null and projModifyId != ''">
+				proj_modify_id = #{projModifyId},
+			</if>
+			<if test="projModifyPerson != null and projModifyPerson != ''">
+				proj_modify_person = #{projModifyPerson},
+			</if>
+			<if test="projModifyTime != null and projModifyTime != ''">
+				proj_modify_time = #{projModifyTime},
+			</if>
+			<if test="remarks != null and remarks != ''">
+				remarks = #{remarks},
+			</if>
+			<if test="deleteData != null and deleteData != ''">
+				delete_data = #{deleteData},
+			</if>
+		</set>
+		WHERE proj_id = #{projId}
+</update>
+</mapper>

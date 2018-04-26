@@ -62,11 +62,5 @@ public class UserDaoImpl implements UserDao {
 		// TODO Auto-generated method stub
 		return sqlSession.selectOne("cn.sep.samp2.user.findUser",userName);
 	}
-	@Override
-	public Integer createDB() throws SQLException {
-		// TODO Auto-generated method stub
-		 sqlSession.getConnection().createStatement().executeUpdate("create database samp4 ");
-		return 1;
-	}
 
 }

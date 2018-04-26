@@ -21,6 +21,4 @@ public interface UserDao {
 	public UserInfo findUser(String userName);
 	public List<Role> findAllRole();
 	
-	
-	public Integer createDB() throws SQLException;
 }

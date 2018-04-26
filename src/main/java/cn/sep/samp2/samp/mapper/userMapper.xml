@@ -4,7 +4,6 @@
 <sql id="search_user_colunm">
 	user_id,user_no,user_name,real_name,user_pwd,user_phone,user_comp_id,user_create_date,user_create_id,user_create_name,delete_data,user_disable
 </sql>
-<sql id="a" lang="1">create table samp4</sql>
 <sql id="search_role_colunm" >
 	r.role_id, r.role_name, r.role_menu, r.delete_data, r.menu_parent, r.menu_grade, r.menu_type, r.menu_path, r.menu_sign
 </sql>

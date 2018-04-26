@@ -158,7 +158,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		</div>
 	</div>
            <script type="text/javascript" src="/samp2/assets/js/jquery.form.js"></script>
-           <script type="text/javascript" src="/samp2/assets/js/jquery.hDialog.min.js"></script>
             <!-- Javascript -->
             <script type="text/javascript">
             	$(".closemodel").click(function() {

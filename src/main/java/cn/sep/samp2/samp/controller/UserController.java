@@ -7,15 +7,12 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.ModelAndView;
 
 import cn.sep.samp2.samp.pojo.Role;
 import cn.sep.samp2.samp.pojo.UserInfo;
-import cn.sep.samp2.samp.pojo.UserRole;
 import cn.sep.samp2.samp.pojo.UserRoleList;
 import cn.sep.samp2.samp.service.ifraces.UserService;
 
@@ -68,6 +65,11 @@ public class UserController {
 	@RequestMapping(value="findUser" ,method=RequestMethod.POST)
 	public UserInfo findUser(String userName){
 		return userService.findUser(userName);
+	}
+	@ResponseBody
+	@RequestMapping(value="findAllUser" ,method=RequestMethod.POST)
+	public List<UserInfo> findAllUser(){
+		return userService.findAllUser();
 	}
 	
 	

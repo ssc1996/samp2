@@ -28,7 +28,7 @@
             <div>
                 <div class="login-form row">
                     <div class="col-sm-12 text-center login-header">
-                        <i class="login-logo fa fa-connectdevelop fa-5x"></i>
+                        <i class="login-logo fa fa-flask fa-5x"></i>
                         <h4 class="login-title"></h4>
                     </div>
                     <div class="col-sm-12">

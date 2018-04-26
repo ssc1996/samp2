@@ -25,6 +25,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     <!-- CSS App -->
     <link rel="stylesheet" type="text/css" href="/samp2/assets/css/style.css">
     <link rel="stylesheet" type="text/css" href="/samp2/assets/css/flat-blue.css">
+    <link rel="stylesheet" type="text/css" href="/samp2/assets/css/time.css">
 </head>
 
 <body class="flat-blue">
@@ -145,6 +146,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
             <!-- Javascript -->
             <script type="text/javascript" src="/samp2/assets/js/app.js"></script>
             <script type="text/javascript" src="/samp2/assets/js/index.js"></script>
+            <script type="text/javascript" src="/samp2/assets/js/Ecalendar.jquery.min.js"></script>
+            <script type="text/javascript" src="/samp2/assets/js/jquery.hDialog.min.js"></script>
             <script>
                         	$(".logout").click(function(){
                         		window.location.href="/samp2/user/removeUser.do";
@@ -154,7 +157,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	                        	var page = $(this).attr("data-page");
 	                        	if(page != null){
 		                        	page = "/samp2/pages/"+page;
-		                        	$.post(page,function(data){
+		                        	$.post(page,{"projMember":"${user.realName }","projPersonLiable":"${user.realName }"},function(data){
 			                        	$(".main").html(data);
 		                        	});
 	                        	}
